@@ -433,11 +433,20 @@ pub async fn proxy_commit_info() -> Result<Response<Body>, String> {
 
 #[cached(time = 600)]
 async fn fetch_commit_info() -> String {
-	let uri = Uri::from_str("https://github.com/redlib-org/redlib/commits/main.atom").expect("Invalid URI");
+	let uri = match Uri::from_str("https://github.com/redlib-org/redlib/commits/main.atom") {
+		Ok(uri) => uri,
+		Err(_) => return String::new(),
+	};
 
-	let resp: Body = CLIENT.get(uri).await.expect("Failed to request GitHub").into_body();
+	let resp: Body = match CLIENT.get(uri).await {
+		Ok(response) => response.into_body(),
+		Err(_) => return String::new(),
+	};
 
-	hyper::body::to_bytes(resp).await.expect("Failed to read body").iter().copied().map(|x| x as char).collect()
+	match hyper::body::to_bytes(resp).await {
+		Ok(bytes) => bytes.iter().copied().map(|x| x as char).collect(),
+		Err(_) => String::new(),
+	}
 }
 
 pub async fn proxy_instances() -> Result<Response<Body>, String> {
@@ -452,9 +461,18 @@ pub async fn proxy_instances() -> Result<Response<Body>, String> {
 
 #[cached(time = 600)]
 async fn fetch_instances() -> String {
-	let uri = Uri::from_str("https://raw.githubusercontent.com/redlib-org/redlib-instances/refs/heads/main/instances.json").expect("Invalid URI");
+	let uri = match Uri::from_str("https://raw.githubusercontent.com/redlib-org/redlib-instances/refs/heads/main/instances.json") {
+		Ok(uri) => uri,
+		Err(_) => return String::new(),
+	};
 
-	let resp: Body = CLIENT.get(uri).await.expect("Failed to request GitHub").into_body();
+	let resp: Body = match CLIENT.get(uri).await {
+		Ok(response) => response.into_body(),
+		Err(_) => return String::new(),
+	};
 
-	hyper::body::to_bytes(resp).await.expect("Failed to read body").iter().copied().map(|x| x as char).collect()
+	match hyper::body::to_bytes(resp).await {
+		Ok(bytes) => bytes.iter().copied().map(|x| x as char).collect(),
+		Err(_) => String::new(),
+	}
 }

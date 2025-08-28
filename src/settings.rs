@@ -86,13 +86,18 @@ pub async fn set(req: Request<Body>) -> Result<Response<Body>, String> {
 
 	for &name in &PREFS {
 		match form.get(name) {
-			Some(value) => response.insert_cookie(
-				Cookie::build((name.to_owned(), value.clone()))
-					.path("/")
-					.http_only(true)
-					.expires(OffsetDateTime::now_utc() + Duration::weeks(52))
-					.into(),
-			),
+			Some(value) => {
+				// Basic input validation: limit length to prevent abuse
+				if value.len() <= 200 {
+					response.insert_cookie(
+						Cookie::build((name.to_owned(), value.clone()))
+							.path("/")
+							.http_only(true)
+							.expires(OffsetDateTime::now_utc() + Duration::weeks(52))
+							.into(),
+					);
+				}
+			},
 			None => response.remove_cookie(name.to_string()),
 		};
 	}
