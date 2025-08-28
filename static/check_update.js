@@ -33,7 +33,7 @@ async function checkInstanceUpdateStatus() {
         document.getElementById('update-status').innerText = statusMessage;
     } catch (error) {
         console.error('Error fetching commits:', error);
-        document.getElementById('update-status').innerText = '⚠️ Error checking update status: ' + error;
+        document.getElementById('update-status').innerText = '⚠️ Error checking update status.';
     }
 }
 
@@ -45,12 +45,22 @@ async function checkOtherInstances() {
         if (instances.length == 0) return;
         const randomInstance = instances[Math.floor(Math.random() * instances.length)];
         const instanceUrl = randomInstance.url ?? randomInstance.onion;
-        // Set the href of the <a> tag to the instance URL with path included
-        document.getElementById('random-instance').href = instanceUrl + window.location.pathname;
-        document.getElementById('random-instance').innerText = "Visit Random Instance";
+        
+        // Validate URL to prevent open redirect attacks
+        try {
+            const url = new URL(instanceUrl);
+            // Only allow http/https protocols
+            if (url.protocol === 'http:' || url.protocol === 'https:') {
+                // Set the href of the <a> tag to the instance URL with path included
+                document.getElementById('random-instance').href = instanceUrl + window.location.pathname;
+                document.getElementById('random-instance').innerText = "Visit Random Instance";
+            }
+        } catch (urlError) {
+            console.error('Invalid instance URL:', instanceUrl);
+        }
     } catch (error) {
         console.error('Error fetching instances:', error);
-        document.getElementById('update-status').innerText = '⚠️ Error checking other instances: ' + error;
+        document.getElementById('update-status').innerText = '⚠️ Error checking other instances.';
     }
 }
 

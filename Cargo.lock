@@ -1481,6 +1481,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3dc4940d00595430b3d7d5a01f6222b5e5b51395d1120bdb28d854bb8abb17a5"
 dependencies = [
  "itoa",
+ "percent-encoding",
  "rinja_derive",
 ]
 
