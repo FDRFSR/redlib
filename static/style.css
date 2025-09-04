@@ -1285,6 +1285,11 @@ a.search_subreddit:hover {
     font-weight: bold;
 }
 
+.post_download {
+    font-weight: bold;
+    margin-left: 10px;
+}
+
 #comment_count {
     font-weight: 500;
     opacity: 0.9;

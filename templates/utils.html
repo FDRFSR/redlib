@@ -318,6 +318,12 @@
 
 	<div class="post_footer">
 		<a href="{{ post.permalink }}" class="post_comments" title="{{ post.comments.1 }} {% if post.comments.1 == "1" %}comment{% else %}comments{% endif %}">{{ post.comments.0 }} {% if post.comments.1 == "1" %}comment{% else %}comments{% endif %}</a>
+		{% if post.media.download_name != "" %}
+		<a href="{{ post.media.url }}" download="{{ post.media.download_name }}" class="post_download" title="Download {{ post.media.download_name }}">
+			<span class="mobile_item">dl</span>
+			<span class="desktop_item">download</span>
+		</a>
+		{% endif %}
 	</div>
 </div>
 {%- endmacro %}
